@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description"content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="stylesheet" href="./components/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>NFG</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+    <script src="https://use.fontawesome.com/f0cde31091.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <SCript>
+      var Messenger = function(el){
+          'use strict';
+          var m = this;
+          
+          m.init = function(){
+            m.codeletters = "&#*+%?£@§$";
+            m.message = 0;
+            m.current_length = 0;
+            m.fadeBuffer = false;
+            m.messages = [
+              'EYE-OPENING.',
+              'INSPIRING.',
+              'MEANINGFUL',
+            ];
+            
+            setTimeout(m.animateIn, 100);
+          };
+          
+          m.generateRandomString = function(length){
+            var random_text = '';
+            while(random_text.length < length){
+              random_text += m.codeletters.charAt(Math.floor(Math.random()*m.codeletters.length));
+            } 
+            
+            return random_text;
+          };
+          
+          m.animateIn = function(){
+            if(m.current_length < m.messages[m.message].length){
+              m.current_length = m.current_length + 2;
+              if(m.current_length > m.messages[m.message].length) {
+                m.current_length = m.messages[m.message].length;
+              }
+              
+              var message = m.generateRandomString(m.current_length);
+              $(el).html(message);
+              
+              setTimeout(m.animateIn, 20);
+            } else { 
+              setTimeout(m.animateFadeBuffer, 20);
+            }
+          };
+          
+          m.animateFadeBuffer = function(){
+            if(m.fadeBuffer === false){
+              m.fadeBuffer = [];
+              for(var i = 0; i < m.messages[m.message].length; i++){
+                m.fadeBuffer.push({c: (Math.floor(Math.random()*12))+1, l: m.messages[m.message].charAt(i)});
+              }
+            }
+            
+            var do_cycles = false;
+            var message = ''; 
+            
+            for(var i = 0; i < m.fadeBuffer.length; i++){
+              var fader = m.fadeBuffer[i];
+              if(fader.c > 0){
+                do_cycles = true;
+                fader.c--;
+                message += m.codeletters.charAt(Math.floor(Math.random()*m.codeletters.length));
+              } else {
+                message += fader.l;
+              }
+            }
+            
+            $(el).html(message);
+            
+            if(do_cycles === true){
+              setTimeout(m.animateFadeBuffer, 50);
+            } else {
+              setTimeout(m.cycleText, 2000);
+            }
+          };
+          
+          m.cycleText = function(){
+            m.message = m.message + 1;
+            if(m.message >= m.messages.length){
+              m.message = 0;
+            }
+            
+            m.current_length = 0;
+            m.fadeBuffer = false;
+            $(el).html('');
+            
+            setTimeout(m.animateIn, 200);
+          };
+          
+          m.init();
+        }
+        
+        console.clear();
+      var messenger = new Messenger($('#messenger'));
+    </SCript>
+  </body>
+
+</html>
